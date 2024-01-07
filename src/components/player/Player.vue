@@ -104,7 +104,7 @@ const playPause = () => {
         </span>
         <ProgressBar
           v-model="insights.player.volume"
-          max="100"
+          :max="100"
           @change="(e: any) => playable!.setVolume(e)"
         />
       </div>

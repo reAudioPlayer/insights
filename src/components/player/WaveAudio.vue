@@ -6,11 +6,12 @@
 <script lang="ts" setup>
 import type { Playable } from "./player";
 import { onMounted, ref } from "vue";
+// @ts-ignore
 import WaveSurfer from "wavesurfer.js";
 
 import { useInsightStore } from "../../stores/insight";
 
-const audio = ref(null) as Ref<any>;
+const audio = ref<any>(null);
 const audioElement = new Audio();
 
 onMounted(() => {
