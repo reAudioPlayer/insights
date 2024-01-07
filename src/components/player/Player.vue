@@ -13,6 +13,7 @@ import WaveAudio from "./WaveAudio.vue";
 const insights = useInsightStore();
 const playable = ref<Playable>();
 const upload = ref<HTMLInputElement>();
+const audio = ref<HTMLAudioElement>();
 
 const onFileChange = (e: any) => {
   const file = e.target.files[0];
@@ -20,7 +21,9 @@ const onFileChange = (e: any) => {
 
   const reader = new FileReader();
   reader.onload = (e: any) => {
-    playable.value!.onSongChange(e.target.result);
+    audio.value!.src = e.target.result;
+    audio.value!.load();
+    playable.value!.onSongChange(audio.value!);
     insights.onSongChange();
     hasUploaded.value = true;
   };
@@ -63,6 +66,7 @@ const playPause = () => {
   <div class="player relative">
     <div class="desktop mx-4">
       <div class="controls">
+        <audio ref="audio" controls v-show="false" />
         <div class="top relative">
           <span
             class="cursor-pointer material-symbols-rounded ms-fill text-4xl"

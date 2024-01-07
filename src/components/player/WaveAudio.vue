@@ -12,7 +12,7 @@ import WaveSurfer from "wavesurfer.js";
 import { useInsightStore } from "../../stores/insight";
 
 const audio = ref<any>(null);
-const audioElement = new Audio();
+const audioElement = ref<any>();
 
 onMounted(() => {
   const waveColor = "white";
@@ -43,28 +43,29 @@ onMounted(() => {
     if (!audio.value) return;
     insights.player.duration = audio.value.getDuration();
   });
-
-  var context = audio.value.backend.ac as AudioContext;
-  var source = context.createMediaElementSource(audioElement);
-  source.connect(context.destination);
-  insights.setSource(source, context);
 });
 
 const insights = useInsightStore();
 
-const onSongChange = (src: string) => {
-  audioElement.src = src;
-  audio.value.load(audioElement);
+const setElement = (el: any) => {
+  audioElement.value = el;
+  const context = new AudioContext();
+  var source = context.createMediaElementSource(audioElement.value!);
+  source.connect(context.destination);
+  insights.setSource(source, context);
+};
+
+const onSongChange = (newAudio: any) => {
+  setElement(newAudio);
+  audio.value.load(newAudio);
 };
 
 const play = () => {
-  try {
-    audio.value.play();
-  } catch (_) {}
+  audioElement.value.play();
 };
 
 const pause = () => {
-  audio.value.pause();
+  audioElement.value.pause();
 };
 
 const seek = (time: number) => {
@@ -88,6 +89,7 @@ const playable: Playable = {
   setVolume,
   setMute,
   onSongChange,
+  setElement,
 };
 
 defineExpose(playable);

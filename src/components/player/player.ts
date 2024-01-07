@@ -3,6 +3,7 @@ export interface Playable {
   pause: () => void;
   seek: (time: number) => void;
   setVolume: (volume: number) => void;
-  onSongChange: (src: string) => void;
+  onSongChange: (element: HTMLAudioElement) => void;
   setMute: (mute: boolean) => void;
+  setElement: (element: any) => void;
 }
