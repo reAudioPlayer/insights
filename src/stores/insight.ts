@@ -70,7 +70,7 @@ export const useInsightStore = defineStore({
     setSource(source: MediaElementAudioSourceNode, context: AudioContext) {
       this._meter = new LoudnessMeter({
         source,
-        workerUri: "/assets/needles/needles-worker.js",
+        workerUri: "/insights/assets/needles/needles-worker.js",
       });
       this._meter?.start();
       this._meter?.pause();
