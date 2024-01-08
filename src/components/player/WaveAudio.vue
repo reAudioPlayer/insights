@@ -52,10 +52,10 @@ onMounted(() => {
 });
 
 const insights = useInsightStore();
-let context = new AudioContext();
 
 const setElement = (el: any) => {
   audioElement.value = el;
+  const context = new AudioContext();
   var source = context.createMediaElementSource(audioElement.value!);
   source.connect(context.destination);
   insights.setSource(source, context);
