@@ -15,8 +15,14 @@ const audio = ref<any>(null);
 const audioElement = ref<any>();
 
 onMounted(() => {
-  const waveColor = "white";
-  const progressColor = "green";
+  const fgBase = getComputedStyle(document.documentElement).getPropertyValue(
+    "--fg-base"
+  );
+  const waveColor = fgBase;
+  const fgSecondary = getComputedStyle(
+    document.documentElement
+  ).getPropertyValue("--fg-secondary");
+  const progressColor = fgSecondary;
 
   // @ts-ignore
   audio.value = WaveSurfer.create({

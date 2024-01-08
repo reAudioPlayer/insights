@@ -472,11 +472,11 @@ const formatLoudness = (loudness: number) => {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%;
 
     .label {
       font-size: 0.8em;
       color: var(--fg-base-dk);
+      text-transform: uppercase;
     }
   }
 }
