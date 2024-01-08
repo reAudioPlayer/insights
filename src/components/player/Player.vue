@@ -5,7 +5,7 @@
 
 <script lang="ts" setup>
 import { useInsightStore } from "../../stores/insight";
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import ProgressBar from "../ProgressBar.vue";
 import type { Playable } from "./player";
 import WaveAudio from "./WaveAudio.vue";
@@ -29,6 +29,14 @@ const onFileChange = (e: any) => {
   };
   reader.readAsDataURL(file);
 };
+
+onMounted(() => {
+  window.addEventListener("keydown", (e) => {
+    if (e.code === "Space") {
+      playPause();
+    }
+  });
+});
 
 const doUpload = () => {
   upload.value!.click();

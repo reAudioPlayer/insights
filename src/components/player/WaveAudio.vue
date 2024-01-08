@@ -52,17 +52,20 @@ onMounted(() => {
 });
 
 const insights = useInsightStore();
+let context = new AudioContext();
 
 const setElement = (el: any) => {
   audioElement.value = el;
-  const context = new AudioContext();
   var source = context.createMediaElementSource(audioElement.value!);
   source.connect(context.destination);
   insights.setSource(source, context);
 };
 
 const onSongChange = (newAudio: any) => {
-  setElement(newAudio);
+  if (!audioElement.value) {
+    setElement(newAudio);
+  }
+  insights.player.playing = false;
   audio.value.load(newAudio);
 };
 

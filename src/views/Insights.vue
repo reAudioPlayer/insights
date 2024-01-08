@@ -325,24 +325,26 @@ const formatLoudness = (loudness: number) => {
       </Card>
     </div>
     <div class="right">
-      <Card class="mode">
-        <span class="label uppercase"> short term </span>
-        <span>
-          {{ formatLoudness(insights.loudness.shortterm) }}
-        </span>
-      </Card>
-      <Card class="mode">
-        <span class="label uppercase"> integrated </span>
-        <span>
-          {{ formatLoudness(insights.loudness.integrated) }}
-        </span>
-      </Card>
-      <Card class="mode">
-        <span class="label uppercase"> max momentary </span>
-        <span>
-          {{ formatLoudness(insights.loudness.maxMomentary) }}
-        </span>
-      </Card>
+      <div class="top">
+        <Card class="mode">
+          <span class="label uppercase"> short term </span>
+          <span>
+            {{ formatLoudness(insights.loudness.shortterm) }}
+          </span>
+        </Card>
+        <Card class="mode">
+          <span class="label uppercase"> integrated </span>
+          <span>
+            {{ formatLoudness(insights.loudness.integrated) }}
+          </span>
+        </Card>
+        <Card class="mode">
+          <span class="label uppercase"> max momentary </span>
+          <span>
+            {{ formatLoudness(insights.loudness.maxMomentary) }}
+          </span>
+        </Card>
+      </div>
       <Card class="meters">
         <div class="meter">
           <span class="label uppercase"> L </span>
@@ -397,14 +399,11 @@ const formatLoudness = (loudness: number) => {
   grid-column: 1 / -1;
 
   .stereo-field {
-    max-width: 400px;
     align-self: center;
     aspect-ratio: 1;
-
-    & canvas {
-      width: 100%;
-      height: 100%;
-    }
+    flex: 1;
+    position: relative;
+    max-height: 380px;
   }
 
   h4 {
@@ -463,9 +462,15 @@ const formatLoudness = (loudness: number) => {
 
 .right {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: max-content 1fr;
   gap: 1em;
   align-content: start;
+
+  .top {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1em;
+  }
 
   .mode {
     padding: 0.5em;
