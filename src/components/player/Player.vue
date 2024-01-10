@@ -15,17 +15,21 @@ const playable = ref<Playable>();
 const upload = ref<HTMLInputElement>();
 const audio = ref<HTMLAudioElement>();
 
+const setSrc = (src: string) => {
+  audio.value!.src = src;
+  audio.value!.load();
+  playable.value!.onSongChange(audio.value!);
+  insights.onSongChange();
+  hasUploaded.value = true;
+};
+
 const onFileChange = (e: any) => {
   const file = e.target.files[0];
   if (!file) return;
 
   const reader = new FileReader();
   reader.onload = (e: any) => {
-    audio.value!.src = e.target.result;
-    audio.value!.load();
-    playable.value!.onSongChange(audio.value!);
-    insights.onSongChange();
-    hasUploaded.value = true;
+    setSrc(e.target.result);
   };
   reader.readAsDataURL(file);
 };
@@ -36,6 +40,12 @@ onMounted(() => {
       playPause();
     }
   });
+
+  // get query param "src"
+  const src = window.location.search.split("src=")[1];
+  if (src) {
+    setSrc(src);
+  }
 });
 
 const doUpload = () => {
@@ -74,7 +84,7 @@ const playPause = () => {
   <div class="player relative">
     <div class="desktop mx-4">
       <div class="controls">
-        <audio ref="audio" controls v-show="false" />
+        <audio ref="audio" controls v-show="false" crossorigin="anonymous" />
         <div class="top relative">
           <span
             class="cursor-pointer material-symbols-rounded ms-fill text-4xl"
