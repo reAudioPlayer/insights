@@ -44,7 +44,9 @@ onMounted(() => {
   // get query param "src"
   const src = window.location.search.split("src=")[1];
   if (src) {
-    setSrc(src);
+    window.setTimeout(() => {
+      setSrc(src);
+    }, 1000);
   }
 });
 
