@@ -5,7 +5,7 @@
 
 <script lang="ts" setup>
 import { useInsightStore } from "../../stores/insight";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import ProgressBar from "../ProgressBar.vue";
 import type { Playable } from "./player";
 import WaveAudio from "./WaveAudio.vue";
@@ -73,6 +73,10 @@ const toggleMuted = () => {
 };
 
 const playPause = () => {
+  if (defaultSrc.value) {
+    uploadLink();
+    return;
+  }
   if (!hasUploaded.value) {
     doUpload();
     return;
@@ -83,6 +87,16 @@ const playPause = () => {
     playable.value!.play();
   }
 };
+
+const playPauseSymbol = computed(() => {
+  if (defaultSrc.value) {
+    return "link";
+  }
+  if (!hasUploaded.value) {
+    return "file_upload";
+  }
+  return insights.player.playing ? "pause_circle" : "play_circle";
+});
 </script>
 <template>
   <input
@@ -102,13 +116,7 @@ const playPause = () => {
             class="cursor-pointer material-symbols-rounded ms-fill text-4xl"
             @click="playPause"
           >
-            {{
-              hasUploaded
-                ? insights.player.playing
-                  ? "pause_circle"
-                  : "play_circle"
-                : "file_upload"
-            }}
+            {{ playPauseSymbol }}
           </span>
         </div>
         <div class="bottom">
