@@ -14,6 +14,7 @@ const insights = useInsightStore();
 const playable = ref<Playable>();
 const upload = ref<HTMLInputElement>();
 const audio = ref<HTMLAudioElement>();
+const defaultSrc = ref<string>();
 
 const setSrc = (src: string) => {
   audio.value!.src = src;
@@ -34,6 +35,20 @@ const onFileChange = (e: any) => {
   reader.readAsDataURL(file);
 };
 
+const uploadLink = () => {
+  if (defaultSrc.value) {
+    const link = defaultSrc.value;
+    defaultSrc.value = "";
+    setSrc(link);
+    return;
+  }
+
+  const link = prompt("Enter a link to an audio file");
+  if (!link) return;
+
+  setSrc(link);
+};
+
 onMounted(() => {
   window.addEventListener("keydown", (e) => {
     if (e.code === "Space") {
@@ -42,12 +57,7 @@ onMounted(() => {
   });
 
   // get query param "src"
-  const src = window.location.search.split("src=")[1];
-  if (src) {
-    window.setTimeout(() => {
-      setSrc(src);
-    }, 1000);
-  }
+  defaultSrc.value = window.location.search.split("src=")[1];
 });
 
 const doUpload = () => {
@@ -114,6 +124,12 @@ const playPause = () => {
         </div>
       </div>
       <div class="aux relative">
+        <span
+          class="icon cursor-pointer material-symbols-rounded ms-fill select-none"
+          @click="uploadLink"
+        >
+          link
+        </span>
         <span
           class="icon cursor-pointer material-symbols-rounded ms-fill select-none"
           @click="doUpload"
@@ -210,7 +226,7 @@ const playPause = () => {
     grid-area: aux;
     justify-content: end;
     display: grid;
-    grid-template-columns: 20px 20px minmax(auto, 8vw);
+    grid-template-columns: 20px 20px 20px minmax(auto, 8vw);
     gap: 1em;
     align-items: center;
 
