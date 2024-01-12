@@ -58,6 +58,9 @@ onMounted(() => {
 
   // get query param "src"
   defaultSrc.value = window.location.search.split("src=")[1];
+  if (defaultSrc.value) {
+    modal.value!.showModal();
+  }
 });
 
 const doUpload = () => {
@@ -66,6 +69,7 @@ const doUpload = () => {
 
 const hasUploaded = ref(false);
 const muted = ref(false);
+const modal = ref<HTMLDialogElement>();
 
 const toggleMuted = () => {
   muted.value = !muted.value;
@@ -89,14 +93,26 @@ const playPause = () => {
 };
 
 const playPauseSymbol = computed(() => {
+  if (hasUploaded.value) {
+    return insights.player.playing ? "pause_circle" : "play_circle";
+  }
+
   if (defaultSrc.value) {
     return "link";
   }
-  if (!hasUploaded.value) {
-    return "file_upload";
-  }
-  return insights.player.playing ? "pause_circle" : "play_circle";
+  return "file_upload";
 });
+
+const trustLink = () => {
+  modal.value!.close();
+  uploadLink();
+};
+
+const distrustLink = () => {
+  defaultSrc.value = "";
+  window.history.replaceState({}, "", "/insights/");
+  modal.value!.close();
+};
 </script>
 <template>
   <input
@@ -107,6 +123,27 @@ const playPauseSymbol = computed(() => {
     accept="audio/*"
     @change="onFileChange"
   />
+  <dialog ref="modal">
+    <h1>Trust Link</h1>
+    <p>
+      The link you followed includes a link to an audio file.
+      <br />
+      Loading this link may expose your IP address or other information.
+      <br />
+      You should only continue if you trust the source of the link.
+    </p>
+    <input disabled type="text" v-model="defaultSrc" />
+    <div class="buttons">
+      <button class="no" @click="distrustLink">
+        <span class="material-symbols-rounded ms-fill">close</span>
+        Don't Trust
+      </button>
+      <button class="yes" @click="trustLink">
+        <span class="material-symbols-rounded ms-fill">check</span>
+        Trust
+      </button>
+    </div>
+  </dialog>
   <div class="player relative">
     <div class="desktop mx-4">
       <div class="controls">
@@ -165,6 +202,64 @@ const playPauseSymbol = computed(() => {
 }
 </style>
 <style scoped>
+dialog[open] {
+  outline: none;
+  border: 1px solid var(--border-base);
+  border-radius: 1em;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 50vw;
+  overflow: hidden;
+
+  & input {
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid var(--border-base);
+    background: transparent;
+    padding: 0.5em;
+    margin-bottom: 1em;
+    font-family: inherit;
+  }
+
+  .buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1em;
+  }
+
+  button {
+    border: none;
+    background: transparent;
+    padding: 0.5em;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 1.2rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    justify-content: center;
+    width: 100%;
+    border-radius: 0.5em;
+    transition: background 0.2s ease-in-out;
+    color: white;
+    background: var(--colour);
+
+    &.yes {
+      --colour: var(--success);
+    }
+
+    &.no {
+      --colour: var(--fail);
+    }
+
+    &:hover {
+      background: color-mix(in srgb, black 20%, var(--colour));
+    }
+  }
+}
+
 .player {
   background: var(--bg-base-lt);
   border-top: 1px solid var(--border-base);
