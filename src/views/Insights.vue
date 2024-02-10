@@ -382,7 +382,9 @@ const formatLoudness = (loudness: number) => {
         </div>
         <h4>Stereo Field</h4>
         <div class="container stereo-field">
-          <canvas ref="stereoFieldChart"></canvas>
+          <div class="container inner">
+            <canvas ref="stereoFieldChart"></canvas>
+          </div>
         </div>
       </Card>
     </div>
@@ -397,13 +399,18 @@ const formatLoudness = (loudness: number) => {
   gap: 1em;
   padding: 0.5em;
   grid-column: 1 / -1;
+  overflow: hidden;
 
   .stereo-field {
     align-self: center;
     aspect-ratio: 1;
     flex: 1;
     position: relative;
-    max-height: 380px;
+
+    .inner {
+      position: absolute;
+      inset: 0;
+    }
   }
 
   h4 {
@@ -432,12 +439,25 @@ const formatLoudness = (loudness: number) => {
   grid-template-columns: 2fr 1fr;
   gap: 1em;
   padding: 1em;
+  height: calc(100% - 2em);
+  overflow: hidden;
 
   > h1 {
     grid-column: 1 / -1;
 
     & span {
       margin-right: 0.5em;
+    }
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    grid-template-rows: max-content 1fr;
+    overflow-y: auto;
+
+    .stereo-field,
+    .stereo-field .inner {
+      min-height: 80vw;
     }
   }
 }

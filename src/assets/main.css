@@ -17,7 +17,8 @@ html, body {
 }
 
 main {
-  overflow: hidden auto;
+  overflow: hidden;
+  position: relative;
 }
 
 h1 {
