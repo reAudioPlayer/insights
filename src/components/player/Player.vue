@@ -7,7 +7,7 @@
 import { useInsightStore } from "../../stores/insight";
 import { ref, onMounted, computed } from "vue";
 import ProgressBar from "../ProgressBar.vue";
-import type { Playable } from "./player";
+import type { Playable } from "./player.ts";
 import WaveAudio from "./WaveAudio.vue";
 
 const insights = useInsightStore();
@@ -286,7 +286,9 @@ dialog[open] {
     grid-area: song-info;
     display: grid;
     align-items: center;
-    grid-template-columns: calc(var(--h-player) - 40px) fit-content(100%) 20px 20px;
+    grid-template-columns: calc(var(--h-player) - 40px) fit-content(
+        100%
+      ) 20px 20px;
     gap: 10px;
     overflow: hidden;
 

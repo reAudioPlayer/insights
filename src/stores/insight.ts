@@ -9,8 +9,7 @@ import { watch } from "vue";
 import { LoudnessMeter } from "@domchristie/needles";
 import { correlation, getData, stereoField } from "../helpers/correlationMeter";
 
-export const useInsightStore = defineStore({
-  id: "insights",
+export const useInsightStore = defineStore("insights", {
   state: () => ({
     stereo: {
       left: 0,
@@ -82,7 +81,7 @@ export const useInsightStore = defineStore({
       this.tonalBalance._analyser.fftSize = 256;
       source.connect(this.tonalBalance._analyser);
       this.tonalBalance.data = new Uint8Array(
-        this.tonalBalance._analyser.frequencyBinCount
+        this.tonalBalance._analyser.frequencyBinCount,
       );
 
       var splitter = context.createChannelSplitter(2);
@@ -96,7 +95,7 @@ export const useInsightStore = defineStore({
       const pcmDataL = new Float32Array(this.stereo._analyserL.fftSize);
       const onFrame = () => {
         this.tonalBalance._analyser.getByteFrequencyData(
-          this.tonalBalance.data
+          this.tonalBalance.data,
         );
 
         this.stereo._analyserR.getFloatTimeDomainData(pcmDataR);
@@ -124,7 +123,7 @@ export const useInsightStore = defineStore({
       this._reset();
       this._meter?.reset();
       this._meter?.on("dataavailable", (e: any) =>
-        this._setLoudness(e.data.mode, e.data.value)
+        this._setLoudness(e.data.mode, e.data.value),
       );
     },
     initialise() {
@@ -136,7 +135,7 @@ export const useInsightStore = defineStore({
           } else {
             this._meter?.pause();
           }
-        }
+        },
       );
     },
     _setLoudness(mode: string, value: number) {
@@ -145,7 +144,7 @@ export const useInsightStore = defineStore({
           this.loudness.momentary = value;
           this.loudness.maxMomentary = Math.max(
             this.loudness.maxMomentary,
-            value
+            value,
           );
           break;
         case "short-term":

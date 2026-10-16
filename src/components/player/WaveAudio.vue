@@ -4,7 +4,7 @@
   -->
 
 <script lang="ts" setup>
-import type { Playable } from "./player";
+import type { Playable } from "./player.ts";
 import { onMounted, ref } from "vue";
 // @ts-ignore
 import WaveSurfer from "wavesurfer.js";
@@ -16,11 +16,11 @@ const audioElement = ref<any>();
 
 onMounted(() => {
   const fgBase = getComputedStyle(document.documentElement).getPropertyValue(
-    "--fg-base"
+    "--fg-base",
   );
   const waveColor = fgBase;
   const fgSecondary = getComputedStyle(
-    document.documentElement
+    document.documentElement,
   ).getPropertyValue("--fg-secondary");
   const progressColor = fgSecondary;
 
